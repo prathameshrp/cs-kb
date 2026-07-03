@@ -362,6 +362,12 @@ module Jekyll
         if page.content
           page.content.gsub!(/```dataview[\s\S]*?```/, "*[Dataview queries are only supported in Obsidian app]*")
           
+          # Replace priority tags with styled span badges
+          page.content.gsub!(/\s+#(p[1-3])\b/i) do
+            tag = $1.downcase
+            " <span class='priority-badge #{tag}'>#{tag.upcase}</span>"
+          end
+          
           page.content.gsub!(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/) do
             full_target = $1.strip
             display = $2 ? $2.strip : full_target
