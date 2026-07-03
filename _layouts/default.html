@@ -55,7 +55,7 @@
           <kbd class="search-kbd">/</kbd>
         </button>
         
-        <a href="https://github.com/prathameshrp" target="_blank" class="github-link" title="GitHub">
+        <a href="https://github.com/prathameshrp/cs-kb" target="_blank" class="github-link" title="GitHub">
           <i class="fab fa-github"></i>
         </a>
       </div>
@@ -262,7 +262,7 @@
 
     // Track recently read notes in localStorage
     (function() {
-      const isPage = {% if page.relative_path %}true{% else %}false{% endif %};
+      const isPage = "{{ page.relative_path }}" ? true : false;
       if (isPage) {
         let history = JSON.parse(localStorage.getItem('cs_lib_visited') || '[]');
         const title = "{{ page.title }}";
