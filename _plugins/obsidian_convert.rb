@@ -15,8 +15,6 @@ module Jekyll
 
       # Use 'post' layout by default
       self.data['layout'] ||= 'post'
-      
-      # Set permalink explicitly to have subject/category/note-name without .html suffix
       self.data['permalink'] = permalink
       
       if self.data['tags'].is_a?(String)
@@ -35,30 +33,60 @@ module Jekyll
     safe true
     priority :high
 
-    def self.clean_segment(segment)
-      # Clean up numbers and patterns: "01 - Concepts" -> "Concepts", "L0 Basics" -> "Basics"
-      clean = segment.sub(/\A(?:\d+\s*-\s*|L\d+\s+|PART\s+[I|V|X]+\s*-*\s*)/i, '')
-      clean.strip
-    end
-
     def self.slugify(str)
+      # Slugify preserving the path and folder names exactly (lowercase, space/slash to hyphen)
       str.downcase.strip.gsub(/[^a-z0-9]+/, '-')
     end
 
     def self.make_permalink(rel_path)
       parts = rel_path.split('/')
-      subject = slugify(clean_segment(parts[0]))
-      
-      middle_slugs = parts[1...-1].map do |seg|
-        slugify(clean_segment(seg))
-      end.reject(&:empty?)
-      
-      filename_slug = slugify(File.basename(parts.last, ".md"))
-      
-      if middle_slugs.empty?
-        "/#{subject}/#{filename_slug}/"
+      # Slugify each individual segment of the path
+      slugified_parts = parts.map { |seg| slugify(File.basename(seg, ".md")) }.reject(&:empty?)
+      "/#{slugified_parts.join('/')}/"
+    end
+
+    def self.insert_into_tree(tree_node, segments, note_title, note_url)
+      if segments.size == 1
+        # It's the note file itself
+        tree_node['files'] << {
+          'title' => note_title,
+          'url' => note_url
+        }
       else
-        "/#{subject}/#{middle_slugs.join('/')}/#{filename_slug}/"
+        # It's a directory
+        dir_name = segments[0]
+        tree_node['dirs'][dir_name] ||= {
+          'name' => dir_name,
+          'dirs' => {},
+          'files' => []
+        }
+        insert_into_tree(tree_node['dirs'][dir_name], segments[1..-1], note_title, note_url)
+      end
+    end
+
+    def self.flatten_tree(node, level, accum)
+      # Sort directories and files alphabetically to maintain clean index order
+      sorted_dirs = node['dirs'].keys.sort
+      sorted_files = node['files'].sort_by { |f| f['title'] }
+      
+      sorted_dirs.each do |dir_name|
+        child_node = node['dirs'][dir_name]
+        accum << {
+          'type' => 'dir',
+          'name' => dir_name,
+          'level' => level,
+          'id' => slugify(dir_name)
+        }
+        flatten_tree(child_node, level + 1, accum)
+      end
+      
+      sorted_files.each do |file|
+        accum << {
+          'type' => 'file',
+          'title' => file['title'],
+          'url' => file['url'],
+          'level' => level
+        }
       end
     end
 
@@ -98,7 +126,7 @@ module Jekyll
         # Skip templates, daily notes, and attachments globally
         next if rel_path.downcase.include?("template") || rel_path.downcase.include?("daily") || rel_path.downcase.include?("attachment")
 
-        # Read the file's frontmatter to check if published is explicitly true
+        # Read frontmatter and only load if published: true
         begin
           content_str = File.read(note_path)
           if content_str =~ /\A(---\s*\n[\s\S]*?\n---\s*\n)/
@@ -113,16 +141,12 @@ module Jekyll
         end
 
         parts = rel_path.split('/')
-        subject_slug = self.class.slugify(self.class.clean_segment(parts[0]))
-        subject_title = self.class.clean_segment(parts[0])
-        
-        # Determine Module Name (clean name of first directory under the subject)
-        module_name = parts.size > 2 ? self.class.clean_segment(parts[1]) : "General"
+        subject_slug = self.class.slugify(parts[0])
+        subject_title = parts[0].gsub('-', ' ')
         
         permalink = self.class.make_permalink(rel_path)
         clean_name = File.basename(rel_path, ".md")
         
-        # Map note names to their clean URL path (resolved for wikilinks)
         note_title_to_url[clean_name] = permalink
         note_title_to_url[clean_name.downcase] = permalink
         note_title_to_title[clean_name.downcase] = clean_name
@@ -136,11 +160,11 @@ module Jekyll
           permalink: permalink,
           subject_slug: subject_slug,
           subject_title: subject_title,
-          module_name: module_name
+          segments: parts[1..-1] # Middle folders + filename
         }
       end
 
-      # Sort all notes by their path before creating Pages to ensure sequential ordering
+      # Sort notes by file path (sequential progress)
       notes_metadata.sort_by! { |n| n[:path] }
       
       Jekyll.logger.info "ObsidianConverter:", "Found #{notes_metadata.size} published notes."
@@ -170,7 +194,7 @@ module Jekyll
           path: note[:path],
           subject_slug: note[:subject_slug],
           subject_title: note[:subject_title],
-          module_name: note[:module_name]
+          segments: note[:segments]
         }
       end
 
@@ -205,24 +229,33 @@ module Jekyll
         end
       end
 
-      # Build curriculum outline for sidebar
-      site.config['curriculum'] = {}
-      notes_by_subject.each do |subject_slug, list|
-        subject_title = list.first[:subject_title]
+      # Build tree navigation structure
+      subjects_trees = {}
+      pages_list.each do |item|
+        subject_slug = item[:subject_slug]
+        subjects_trees[subject_slug] ||= {
+          'title' => item[:subject_title],
+          'dirs' => {},
+          'files' => []
+        }
         
-        modules = {}
-        list.each do |item|
-          mod_name = item[:module_name]
-          modules[mod_name] ||= []
-          modules[mod_name] << {
-            'title' => item[:title],
-            'url' => item[:page].url
-          }
-        end
+        self.class.insert_into_tree(
+          subjects_trees[subject_slug], 
+          item[:segments], 
+          item[:title], 
+          item[:page].url
+        )
+      end
+
+      # Flatten tree navigation for easy sidebar loops in Liquid
+      site.config['curriculum'] = {}
+      subjects_trees.each do |subject_slug, tree|
+        flat_items = []
+        self.class.flatten_tree(tree, 0, flat_items)
         
         site.config['curriculum'][subject_slug] = {
-          'title' => subject_title,
-          'modules' => modules
+          'title' => tree['title'],
+          'items' => flat_items
         }
       end
 

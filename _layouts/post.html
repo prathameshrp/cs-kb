@@ -2,74 +2,47 @@
 layout: default
 ---
 
-<article class="lesson-article">
-  <!-- Article Header -->
-  <header class="lesson-header">
-    <div class="lesson-breadcrumbs">
-      <a href="{{ '/' | relative_url }}">Dashboard</a> 
-      <span class="separator">/</span> 
-      <span class="current-subject">{{ page.url | split: '/' | first | replace: '-', ' ' | capitalize }}</span>
+<article class="wiki-article">
+  <!-- Minimal Header -->
+  <header class="wiki-header">
+    <div class="wiki-breadcrumbs">
+      <a href="{{ '/' | relative_url }}">Dashboard</a>
+      {% assign url_parts = page.url | split: '/' %}
+      {% for part in url_parts %}
+        {% unless forloop.first or forloop.last %}
+          <span class="sep">/</span>
+          <span class="crumb">{{ part | replace: '-', ' ' | capitalize }}</span>
+        {% endunless %}
+      {% endfor %}
     </div>
     
-    <h1 class="lesson-title">{{ page.title }}</h1>
+    <h1 class="wiki-title">{{ page.title }}</h1>
     
-    <!-- Tags row -->
     {% if page.tags and page.tags.size > 0 %}
-    <div class="note-tags">
+    <div class="wiki-tags">
       {% for tag in page.tags %}
-        <span class="note-tag">#{{ tag }}</span>
+        <span class="wiki-tag">#{{ tag }}</span>
       {% endfor %}
     </div>
     {% endif %}
   </header>
 
-  <!-- Main Markdown Content -->
-  <section class="lesson-content markdown-body">
+  <!-- Clean Reading Body -->
+  <section class="wiki-content markdown-body">
     {{ content }}
   </section>
 
   <!-- Backlinks Section -->
   {% if page.backlinks and page.backlinks.size > 0 %}
-  <section class="backlinks-section">
-    <h3><i class="fa fa-link"></i> Backlinks</h3>
-    <p class="backlinks-desc">Other concepts in the vault that link back here:</p>
-    <div class="backlinks-grid">
+  <section class="wiki-backlinks">
+    <h4>Linked references:</h4>
+    <ul class="backlinks-list">
       {% for bl in page.backlinks %}
-        <a href="{{ bl.url | relative_url }}" class="backlink-card">
-          <div class="backlink-title">{{ bl.title }}</div>
-          <div class="backlink-meta">Referenced in note</div>
-        </a>
+        <li>
+          <a href="{{ bl.url | relative_url }}">{{ bl.title }}</a>
+        </li>
       {% endfor %}
-    </div>
+    </ul>
   </section>
-  {% endif %}
-
-  <!-- Lesson Progression Navigation (Odin Project style) -->
-  {% if page.previous_lesson or page.next_lesson %}
-  <nav class="lesson-navigation">
-    {% if page.previous_lesson %}
-      <a href="{{ page.previous_lesson.url | relative_url }}" class="lesson-nav-card prev-card" title="Read previous note: {{ page.previous_lesson.title }}">
-        <span class="nav-indicator"><i class="fa fa-arrow-left"></i> Previous Lesson</span>
-        <span class="nav-title">{{ page.previous_lesson.title }}</span>
-      </a>
-    {% else %}
-      <div class="lesson-nav-card disabled-card">
-        <span class="nav-indicator">End of path</span>
-        <span class="nav-title">You've reached the start</span>
-      </div>
-    {% endif %}
-
-    {% if page.next_lesson %}
-      <a href="{{ page.next_lesson.url | relative_url }}" class="lesson-nav-card next-card" title="Read next note: {{ page.next_lesson.title }}">
-        <span class="nav-indicator">Next Lesson <i class="fa fa-arrow-right"></i></span>
-        <span class="nav-title">{{ page.next_lesson.title }}</span>
-      </a>
-    {% else %}
-      <div class="lesson-nav-card disabled-card">
-        <span class="nav-indicator">End of path</span>
-        <span class="nav-title">You've completed this section!</span>
-      </div>
-    {% endif %}
-  </nav>
   {% endif %}
 </article>
