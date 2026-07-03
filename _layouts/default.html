@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
   
-  <!-- Inter & JetBrains Mono Fonts -->
+  <!-- Premium Typography: Roboto Slab (Headings), Inter (Body), JetBrains Mono (Code) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Roboto+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Minimalist Stylesheet -->
+  <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body class="confluence-theme">
@@ -68,7 +68,7 @@
         <nav class="sidebar-nav">
           <div class="sidebar-section">
             <a href="{{ '/' | relative_url }}" class="sidebar-link-btn">
-              <i class="fa fa-home"></i> Dashboard
+              <i class="fa fa-house"></i> Dashboard
             </a>
           </div>
 
@@ -79,7 +79,7 @@
             
             <div class="sidebar-subject-group" data-subject="{{ subject_slug }}">
               <div class="sidebar-subject-title">
-                <i class="fa fa-book-bookmark subject-icon"></i>
+                <i class="fa fa-folder-open subject-icon"></i>
                 <span>{{ subject.title }}</span>
               </div>
               
@@ -88,7 +88,7 @@
                   {% if item.type == 'dir' %}
                     <div class="tree-item tree-dir" style="--indent: {{ item.level }}">
                       <i class="fa fa-chevron-right fold-arrow"></i>
-                      <i class="fa fa-folder folder-icon"></i>
+                      <i class="fa-regular fa-folder folder-icon"></i>
                       <span>{{ item.name }}</span>
                     </div>
                   {% else %}
@@ -97,7 +97,7 @@
                       {% assign is_active = true %}
                     {% endif %}
                     <div class="tree-item tree-file {% if is_active %}active{% endif %}" style="--indent: {{ item.level }}">
-                      <i class="fa fa-file-lines file-icon"></i>
+                      <i class="fa-regular fa-file-lines file-icon"></i>
                       <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
                     </div>
                   {% endif %}
@@ -108,12 +108,24 @@
         </nav>
       </aside>
 
-      <!-- Main Reading Panel Frame -->
-      <main class="app-main-content">
-        <div class="reading-container">
-          {{ content }}
-        </div>
-      </main>
+      <!-- Main Content Panel Frame -->
+      <div class="main-content-wrapper">
+        <main class="app-main-content">
+          <div class="reading-container">
+            {{ content }}
+          </div>
+        </main>
+        
+        <!-- Right Table of Contents (Floating Panel) -->
+        <aside id="right-toc-aside" class="right-toc-aside">
+          <div class="toc-sticky-container">
+            <div class="toc-header">
+              <i class="fa-solid fa-list-ul"></i> ON THIS PAGE
+            </div>
+            <nav id="toc-content"></nav>
+          </div>
+        </aside>
+      </div>
 
     </div>
   </div>
@@ -124,7 +136,7 @@
   <!-- Command search handler -->
   <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
   
-  <!-- Sidebar directory collapsing scripts -->
+  <!-- UI Interactions script -->
   <script>
     const sidebarToggle = document.getElementById('sidebar-toggle');
     const sidebarElement = document.getElementById('app-sidebar');
@@ -172,6 +184,26 @@
     
     // Initial run to check folder visibility
     updateTreeVisibility();
+
+    // Dynamically generate Table of Contents (TOC)
+    const tocContent = document.getElementById('toc-content');
+    const tocAside = document.getElementById('right-toc-aside');
+    if (tocContent && tocAside) {
+      const headings = document.querySelectorAll('.markdown-body h2, .markdown-body h3');
+      if (headings.length > 0) {
+        let tocHtml = '<ul class="toc-list">';
+        headings.forEach((heading, idx) => {
+          const id = heading.id || heading.textContent.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
+          heading.id = id;
+          const level = heading.tagName.toLowerCase();
+          tocHtml += `<li class="toc-item toc-${level}"><a href="#${id}">${heading.textContent}</a></li>`;
+        });
+        tocHtml += '</ul>';
+        tocContent.innerHTML = tocHtml;
+      } else {
+        tocAside.style.display = 'none';
+      }
+    }
 
     // Dynamically wrap code blocks inside post panels
     document.querySelectorAll('.markdown-body pre').forEach(pre => {
