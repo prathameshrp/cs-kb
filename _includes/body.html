@@ -1,0 +1,67 @@
+<div class="page-wrapper" tabindex="-1" role="main">
+    {% if page.cover %}
+        <img src="{{ page.cover }}"
+             width="100%"
+             height="{{ page.cover_height | default: '100%' }}"
+             alt="{{ page.title | escape }}"
+             style="object-fit: cover;"
+        />
+    {% endif %}
+
+    <div class="page-inner">
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    {% if page.title %}
+                        <h1 id="{{ page.id }}">{{ page.title | escape }}</h1>
+                    {% else %}
+                        <h1 id="{{ page.id }}">{{ site.title | escape }}</h1>
+                    {% endif %}
+
+                    <!-- Render Tags if present -->
+                    {% if page.tags and page.tags.size > 0 %}
+                    <div class="note-tags">
+                        {% for tag in page.tags %}
+                        <span class="note-tag">#{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {{ content }}
+
+                    <!-- Render Backlinks if present -->
+                    {% if page.backlinks and page.backlinks.size > 0 %}
+                    <div class="backlinks-section">
+                        <h3><i class="fa fa-link"></i> Backlinks</h3>
+                        <div class="backlinks-grid">
+                            {% for backlink in page.backlinks %}
+                            <a href="{{ backlink.url | relative_url }}" class="backlink-card">
+                                <div class="backlink-title">{{ backlink.title }}</div>
+                                <div class="backlink-meta">Referenced in this note</div>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {%- if jekyll.environment != 'dev' and site.disqushandler -%}
+                        {%- include disqus.html -%}
+                    {%- endif -%}
+                </section>
+            </div>
+
+            {%- include search.html -%}
+        </div>
+    </div>
+</div>
+
+<!-- introduce mathjax support -->
+{% include mathjax.html %}
+
+<!-- introduce per-page mermaid support -->
+{% if page.mermaid %}
+    {% include mermaid.html %}
+{% endif %}
+
+<!-- introduce mathjax support -->
+{% include fixes-chrome-anchors.html %}

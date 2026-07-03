@@ -1,0 +1,146 @@
+/* Custom Styles for CS Reference Library */
+
+/* Offline / Private links style */
+.offline-link {
+  color: #8c8c8c;
+  border-bottom: 1px dotted #8c8c8c;
+  cursor: help;
+  display: inline-block;
+  padding: 0 2px;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+  font-size: 0.95em;
+  transition: all 0.2s ease;
+}
+
+.offline-link:hover {
+  color: #595959;
+  background-color: #efefef;
+}
+
+/* Dark mode compatibility for offline links */
+body.theme-night .offline-link {
+  color: #8c8c8c;
+  background-color: #1e1e1e;
+  border-bottom: 1px dotted #555;
+}
+
+body.theme-night .offline-link:hover {
+  color: #ccc;
+  background-color: #2a2a2a;
+}
+
+/* Tag Badges */
+.note-tags {
+  margin-top: 10px;
+  margin-bottom: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.note-tag {
+  font-size: 0.8em;
+  font-weight: 500;
+  padding: 3px 10px;
+  background-color: #e6f7ff;
+  color: #1890ff;
+  border: 1px solid #91d5ff;
+  border-radius: 12px;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+}
+
+.note-tag:hover {
+  background-color: #bae7ff;
+  color: #096dd9;
+  transform: translateY(-1px);
+}
+
+body.theme-night .note-tag {
+  background-color: #112a45;
+  color: #177ddc;
+  border: 1px solid #1765ad;
+}
+
+body.theme-night .note-tag:hover {
+  background-color: #1765ad;
+  color: #1890ff;
+}
+
+/* Backlinks Section */
+.backlinks-section {
+  margin-top: 50px;
+  padding-top: 20px;
+  border-top: 1px solid #eaecef;
+}
+
+body.theme-night .backlinks-section {
+  border-top-color: #30363d;
+}
+
+.backlinks-section h3 {
+  font-size: 1.25em;
+  color: #24292e;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+body.theme-night .backlinks-section h3 {
+  color: #adbac7;
+}
+
+.backlinks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.backlink-card {
+  padding: 10px 15px;
+  background-color: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  text-decoration: none !important;
+  display: block;
+  transition: all 0.2s ease;
+}
+
+.backlink-card:hover {
+  background-color: #f1f8ff;
+  border-color: #0366d6;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.backlink-title {
+  font-weight: 500;
+  color: #0366d6;
+  font-size: 0.95em;
+}
+
+.backlink-meta {
+  font-size: 0.75em;
+  color: #586069;
+  margin-top: 4px;
+}
+
+body.theme-night .backlink-card {
+  background-color: #1c2128;
+  border-color: #444c56;
+}
+
+body.theme-night .backlink-card:hover {
+  background-color: #22272e;
+  border-color: #539bf5;
+}
+
+body.theme-night .backlink-title {
+  color: #539bf5;
+}
+
+body.theme-night .backlink-meta {
+  color: #768390;
+}

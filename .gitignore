@@ -1,0 +1,14 @@
+# Jekyll output and cache directories
+_site/
+.jekyll-cache/
+.jekyll-metadata
+
+# Bundler config and gem paths
+.bundle/
+vendor/
+
+# OS/IDE files
+.DS_Store
+.idea/
+.vscode/
+*.log

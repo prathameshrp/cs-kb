@@ -1,0 +1,47 @@
+title: "CS Library"
+longtitle: "Computer Science Reference Library"
+description: "A comprehensive, searchable library of Computer Science topics, concepts, cheatsheets, and interview preparation resources."
+author: "Prathamesh"
+email: "prathameshrp@github"
+
+# URLs
+url: "https://prathameshrp.github.io"
+baseurl: "/cs-kb"
+
+# Theme
+remote_theme: sighingnow/jekyll-gitbook
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+  - jekyll-feed
+  - jekyll-toc
+
+# Markdown Settings
+markdown: kramdown
+kramdown:
+  auto_ids: true
+  syntax_highlighter: rouge
+
+# Excludes (standard Jekyll excludes)
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - Makefile
+  - README.md
+  - vendor/
+  - .github/
+  - .git/
+
+# GitBook Theme settings
+gitbook:
+  # Enable search
+  search: true
+  # Font and theme settings
+  fontsettings:
+    theme: white # Options: white, sepia, night
+    family: sans # Options: sans, serif
+    size: 2      # Font size scale (1-4)
+  # Inject custom CSS stylesheet
+  extra_css:
+    - assets/css/custom.css
