@@ -29,3 +29,9 @@ exclude:
   - vendor/
   - .github/
   - .git/
+
+# Whitelisted Vault Folders to Publish
+published_folders:
+  - "Java-Notes/00 - MOCs/"
+  - "Java-Notes/01 - Concepts/L0 Basics/"
+

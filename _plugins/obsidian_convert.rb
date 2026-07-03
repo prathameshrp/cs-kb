@@ -97,22 +97,7 @@ module Jekyll
         return
       end
 
-      whitelist_prefixes = [
-        "Java-Notes/01 - Concepts/",
-        "Java-Notes/02 - Patterns/",
-        "Java-Notes/03 - Questions/",
-        "Java-Notes/04 - Cheatsheets/",
-        "DSA/DSA-Notes/",
-        "AI-ML-Notes/",
-        "Cloud-Notes/",
-        "DevOps-SRE-Notes/",
-        "Networks-Notes/",
-        "OS-Systems-Notes/",
-        "SystemDesign-Notes/",
-        "WebDev-Notes/",
-        "Data-Science-Notes/"
-      ]
-
+      whitelist_prefixes = site.config['published_folders'] || []
       note_title_to_url = {}
       note_title_to_title = {}
       notes_metadata = []
