@@ -1,19 +1,18 @@
-/* Chirpy-Inspired Dark Theme Design System */
+/* Confluence Minimalist Theme Design System */
 
 :root {
-  --bg-app: #101216;
-  --bg-sidebar: #1b1f23;
-  --bg-hover: #2f363d;
-  --bg-input: #101216;
-  --bg-card: #1d212a;
+  --bg-app: #0d1117;
+  --bg-sidebar: #161b22;
+  --bg-hover: #21262d;
+  --bg-input: #0d1117;
   
-  --text-main: #a9b2c3;
+  --text-main: #c9d1d9;
   --text-heading: #f0f6fc;
-  --text-muted: #6a737d;
-  --text-link: #389fff;
-  --text-link-hover: #79b8ff;
+  --text-muted: #8b949e;
+  --text-link: #58a6ff;
+  --text-link-hover: #1f6feb;
   
-  --border-color: #21262d;
+  --border-color: #30363d;
   
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   --font-serif: 'Roboto Slab', Georgia, serif;
@@ -43,7 +42,6 @@ body {
 a {
   color: var(--text-link);
   text-decoration: none;
-  transition: color 0.15s ease;
 }
 
 a:hover {
@@ -162,7 +160,7 @@ a:hover {
   min-height: calc(100vh - var(--header-height));
 }
 
-/* Page Tree Sidebar (Chirpy Style) */
+/* Page Tree Sidebar */
 .app-sidebar {
   width: var(--sidebar-width);
   background-color: var(--bg-sidebar);
@@ -174,57 +172,14 @@ a:hover {
   z-index: 90;
   overflow-y: auto;
   transition: transform 0.25s ease, width 0.25s ease;
-  display: flex;
-  flex-direction: column;
 }
 
 .app-sidebar.collapsed {
   transform: translateX(-100%);
 }
 
-/* Chirpy Sidebar Profile Wrapper */
-.sidebar-profile {
-  padding: 32px 16px 20px 16px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.profile-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #1f6feb 0%, #389fff 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: #fff;
-  border: 2px solid var(--border-color);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.profile-name {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text-heading);
-  margin-top: 4px;
-}
-
-.profile-bio {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  line-height: 1.4;
-  padding: 0 8px;
-}
-
 .sidebar-nav {
   padding: 16px 12px;
-  flex: 1;
 }
 
 .sidebar-section {
@@ -235,23 +190,17 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--text-muted);
+  color: var(--text-heading);
   font-weight: 500;
   font-size: 0.9rem;
   padding: 8px 12px;
   border-radius: 6px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .sidebar-link-btn:hover {
   background-color: var(--bg-hover);
-  color: var(--text-heading);
   text-decoration: none;
-}
-
-.sidebar-link-btn.active {
-  background-color: var(--bg-hover);
-  color: var(--text-link);
 }
 
 /* Subject grouping */
@@ -265,7 +214,7 @@ a:hover {
   gap: 8px;
   color: var(--text-heading);
   font-weight: 600;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 6px 12px;
@@ -295,7 +244,6 @@ a:hover {
   user-select: none;
   padding-left: calc(var(--indent) * 16px + 12px);
   min-height: 32px;
-  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .tree-item:hover {
@@ -315,7 +263,7 @@ a:hover {
 
 .tree-item.active {
   background-color: var(--bg-hover);
-  color: var(--text-link);
+  color: var(--text-heading);
   font-weight: 500;
 }
 
@@ -391,7 +339,7 @@ a:hover {
 }
 
 .toc-header {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: var(--text-heading);
   letter-spacing: 0.08em;
@@ -399,7 +347,6 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 8px;
-  text-transform: uppercase;
 }
 
 .toc-list {
@@ -410,7 +357,7 @@ a:hover {
 }
 
 .toc-item {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
 }
 
 .toc-item a {
