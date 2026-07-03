@@ -6,7 +6,13 @@ permalink: /
 
 <div style="margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px solid var(--border-color);">
   <h1 style="font-family: var(--font-serif); font-size: 2rem; font-weight: 600; color: var(--text-heading); margin-bottom: 10px;">CS Library</h1>
-  <p style="font-size: 1rem; color: var(--text-muted); line-height: 1.6; max-width: 520px;">Structured notes on Computer Science fundamentals. From basics to advanced topics. Built for long-term reference.</p>
+  <p style="font-size: 1rem; color: var(--text-muted); line-height: 1.6; max-width: 520px; margin-bottom: 10px;">Structured notes on Computer Science fundamentals. From basics to advanced topics. Built for long-term reference.</p>
+  {% if site.site_last_updated %}
+  <p style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+    <i class="fa-regular fa-clock" style="font-size: 0.75rem;"></i>
+    Last updated: <time datetime="{{ site.site_last_updated_iso }}">{{ site.site_last_updated }}</time>
+  </p>
+  {% endif %}
 </div>
 
 <!-- Recently Visited (Client-side, hidden until pages read) -->

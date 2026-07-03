@@ -1,6 +1,8 @@
 require 'find'
 require 'yaml'
 require 'fileutils'
+require 'shellwords'
+require 'date'
 
 module Jekyll
   class ObsidianPage < Page
@@ -136,6 +138,16 @@ module Jekyll
         note_title_to_url[clean_name.downcase] = permalink
         note_title_to_title[clean_name.downcase] = clean_name
         
+        # Get last git commit date for this specific file
+        git_date = nil
+        begin
+          git_date_raw = `git -C #{notes_dir.shellescape} log --format="%ai" -1 -- #{note_path.shellescape} 2>/dev/null`.strip
+          git_date = DateTime.parse(git_date_raw) unless git_date_raw.empty?
+        rescue
+          # Fallback: file mtime
+          git_date = File.mtime(note_path)
+        end
+
         notes_metadata << {
           path: note_path,
           dir: File.dirname(permalink),
@@ -146,7 +158,8 @@ module Jekyll
           subject_slug: subject_slug,
           subject_title: subject_title,
           subject_folder: parts[0],
-          segments: parts[1..-1] # Middle folders + filename
+          segments: parts[1..-1], # Middle folders + filename
+          last_modified: git_date
         }
       end
 
@@ -173,6 +186,12 @@ module Jekyll
         
         page.data['title'] ||= note[:title]
         title_key = page.data['title'].downcase
+
+        # Inject last modified date into page data
+        if note[:last_modified]
+          page.data['last_modified_at'] = note[:last_modified].strftime('%B %-d, %Y')
+          page.data['last_modified_iso'] = note[:last_modified].strftime('%Y-%m-%d')
+        end
         
         pages_list << { 
           page: page, 
@@ -181,7 +200,8 @@ module Jekyll
           subject_slug: note[:subject_slug],
           subject_title: note[:subject_title],
           subject_folder: note[:subject_folder],
-          segments: note[:segments]
+          segments: note[:segments],
+          last_modified: note[:last_modified]
         }
       end
 
@@ -278,6 +298,14 @@ module Jekyll
           'first_lesson_url' => first_lesson_url,
           'items' => flat_items
         }
+      end
+
+      # Compute the site-wide last updated date (most recent across all published notes)
+      all_dates = pages_list.map { |item| item[:last_modified] }.compact
+      if all_dates.any?
+        latest = all_dates.max
+        site.config['site_last_updated'] = latest.strftime('%B %-d, %Y')
+        site.config['site_last_updated_iso'] = latest.strftime('%Y-%m-%d')
       end
 
       # Pass 2: Scan for links to build backlinks

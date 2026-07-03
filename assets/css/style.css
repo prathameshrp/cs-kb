@@ -400,8 +400,38 @@ a:hover {
   font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--text-heading);
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   line-height: 1.25;
+}
+
+/* Article meta row: last updated + source */
+.wiki-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.wiki-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.wiki-meta-sep {
+  color: var(--border-color);
+}
+
+.wiki-meta-source {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.wiki-meta-source:hover {
+  color: var(--text-link);
+  text-decoration: none;
 }
 
 /* Article tags */
