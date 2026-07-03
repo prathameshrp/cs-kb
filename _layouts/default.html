@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
   
-  <!-- Inter & Fira Code Fonts -->
+  <!-- Inter & JetBrains Mono Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   
-  <!-- FontAwesome Icons (Muted/Simple UI) -->
+  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Minimalist Stylesheet -->
@@ -172,6 +172,61 @@
     
     // Initial run to check folder visibility
     updateTreeVisibility();
+
+    // Dynamically wrap code blocks inside post panels
+    document.querySelectorAll('.markdown-body pre').forEach(pre => {
+      const code = pre.querySelector('code');
+      if (!code) return;
+
+      // Extract language class (e.g. language-java)
+      let lang = '';
+      const langMatch = Array.from(code.classList).find(cls => cls.startsWith('language-'));
+      if (langMatch) {
+        lang = langMatch.substring(9).toUpperCase();
+      }
+
+      // Create code-block-wrapper
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block-wrapper';
+
+      // Create top menu bar
+      const topBar = document.createElement('div');
+      topBar.className = 'code-block-header';
+      
+      const dots = document.createElement('div');
+      dots.className = 'code-block-dots';
+      dots.innerHTML = '<span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>';
+
+      const meta = document.createElement('div');
+      meta.className = 'code-block-meta';
+      
+      const langLabel = document.createElement('span');
+      langLabel.className = 'code-block-lang';
+      langLabel.textContent = lang || 'CODE';
+
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'code-block-copy-btn';
+      copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(code.textContent);
+        copyBtn.innerHTML = '<i class="fa fa-check"></i> Copied';
+        copyBtn.classList.add('copied');
+        setTimeout(() => {
+          copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      });
+
+      meta.appendChild(langLabel);
+      meta.appendChild(copyBtn);
+      topBar.appendChild(dots);
+      topBar.appendChild(meta);
+
+      // Insert wrapper in DOM
+      pre.parentNode.insertBefore(wrapper, pre);
+      wrapper.appendChild(topBar);
+      wrapper.appendChild(pre);
+    });
   </script>
 </body>
 </html>
