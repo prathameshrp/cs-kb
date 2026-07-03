@@ -57,9 +57,13 @@ module Jekyll
         slugify(clean)
       end
 
-      slugified_filename = slugify(File.basename(filename, ".md"))
+      if File.basename(filename, ".md").downcase == "readme"
+        slugified_parts = slugified_folders
+      else
+        slugified_filename = slugify(File.basename(filename, ".md"))
+        slugified_parts = slugified_folders + [slugified_filename]
+      end
 
-      slugified_parts = slugified_folders + [slugified_filename]
       slugified_parts.reject!(&:empty?)
       
       "/#{slugified_parts.join('/')}/"
@@ -67,18 +71,21 @@ module Jekyll
 
     def self.insert_into_tree(tree_node, segments, note_title, note_url)
       if segments.size == 1
-        # It's the note file itself
-        tree_node['files'] << {
-          'title' => note_title,
-          'url' => note_url
-        }
+        if note_title.downcase == "readme"
+          tree_node['url'] = note_url
+        else
+          tree_node['files'] << {
+            'title' => note_title,
+            'url' => note_url
+          }
+        end
       else
-        # It's a directory
         dir_name = segments[0]
         tree_node['dirs'][dir_name] ||= {
           'name' => dir_name,
           'dirs' => {},
-          'files' => []
+          'files' => [],
+          'url' => nil
         }
         insert_into_tree(tree_node['dirs'][dir_name], segments[1..-1], note_title, note_url)
       end
@@ -95,7 +102,8 @@ module Jekyll
           'type' => 'dir',
           'name' => dir_name,
           'level' => level,
-          'id' => slugify(dir_name)
+          'id' => slugify(dir_name),
+          'url' => child_node['url']
         }
         flatten_tree(child_node, level + 1, accum)
       end
@@ -122,10 +130,21 @@ module Jekyll
       note_title_to_title = {}
       notes_metadata = []
 
+      whitelisted_subjects = whitelist_prefixes.map { |p| p.split('/').first }.compact.uniq
+
       # Pass 1: Scan and identify all whitelisted notes (ONLY if published: true)
       Dir.glob(File.join(notes_dir, "**/*.md")).each do |note_path|
         rel_path = note_path.sub("#{notes_dir}/", "")
-        is_whitelisted = whitelist_prefixes.any? { |prefix| rel_path.start_with?(prefix) }
+        parts = rel_path.split('/')
+
+        # Allow if path starts with whitelist prefix OR is README.md directly inside a whitelisted subject root
+        is_subject_readme = false
+        if rel_path.downcase.end_with?("readme.md") && parts.size == 2
+          subject_folder = parts[0]
+          is_subject_readme = whitelisted_subjects.include?(subject_folder)
+        end
+
+        is_whitelisted = whitelist_prefixes.any? { |prefix| rel_path.start_with?(prefix) } || is_subject_readme
         next unless is_whitelisted
         
         # Skip templates, daily notes, and attachments globally
@@ -305,9 +324,9 @@ module Jekyll
           pref.sub(subject_folder + "/", "").chomp("/")
         end.reject(&:empty?)
 
-        # Find first lesson url
+        # Find first lesson url (README index url takes priority, fallback to first child file)
         first_lesson = flat_items.find { |item| item['type'] == 'file' }
-        first_lesson_url = first_lesson ? first_lesson['url'] : "#"
+        first_lesson_url = tree['url'] || (first_lesson ? first_lesson['url'] : "#")
 
         site.config['curriculum'][subject_slug] = {
           'title' => tree['title'],
