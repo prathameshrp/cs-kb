@@ -86,14 +86,10 @@
               <div class="sidebar-subject-tree">
                 {% for item in subject.items %}
                   {% if item.type == 'dir' %}
-                    <div class="tree-item tree-dir {% if page.url == item.url %}active{% endif %}" style="--indent: {{ item.level }}">
+                    <div class="tree-item tree-dir" style="--indent: {{ item.level }}">
                       <i class="fa fa-chevron-right fold-arrow"></i>
                       <i class="fa-regular fa-folder folder-icon"></i>
-                      {% if item.url %}
-                        <a href="{{ item.url | relative_url }}" class="dir-link">{{ item.name }}</a>
-                      {% else %}
-                        <span>{{ item.name }}</span>
-                      {% endif %}
+                      <span>{{ item.name }}</span>
                     </div>
                   {% else %}
                     {% assign is_active = false %}
