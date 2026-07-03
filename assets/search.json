@@ -1,0 +1,17 @@
+---
+---
+[
+  {% assign first = true %}
+  {% for p in site.pages %}
+    {% if p.relative_path %}
+      {% unless first %},{% endunless %}
+      {
+        "title": {{ p.title | jsonify }},
+        "url": {{ p.url | relative_url | jsonify }},
+        "tags": {{ p.tags | jsonify }},
+        "content": {{ p.content | strip_html | jsonify }}
+      }
+      {% assign first = false %}
+    {% endif %}
+  {% endfor %}
+]
