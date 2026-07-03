@@ -41,39 +41,9 @@ Hi, I'm Prathamesh. Welcome to my digital computer science library. This is wher
 
 ---
 
-## Curriculum Paths
-
-I organize my self-study topics into two main learning pathways. Follow them in sequence for a complete curriculum path:
-
-<div style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px; margin-bottom: 35px;">
-  
-  <div style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 6px; padding: 16px; display: flex; align-items: center; gap: 16px;">
-    <div style="font-size: 1.5rem; font-weight: bold; color: #58a6ff; min-width: 40px; text-align: center;">01</div>
-    <div>
-      <h4 style="color: var(--text-heading); font-weight: 600; margin-bottom: 4px;">Software Fundamentals Path</h4>
-      <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0;">
-        Mastering language mechanics, memory models, and data organization &rarr; <strong>Java Programming</strong> &rarr; <strong>Data Structures & Algorithms</strong>
-      </p>
-    </div>
-  </div>
-
-  <div style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 6px; padding: 16px; display: flex; align-items: center; gap: 16px;">
-    <div style="font-size: 1.5rem; font-weight: bold; color: #fdae84; min-width: 40px; text-align: center;">02</div>
-    <div>
-      <h4 style="color: var(--text-heading); font-weight: 600; margin-bottom: 4px;">Systems & Scale Path</h4>
-      <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0;">
-        Designing distributed architectures, data storage layers, and scaling microservices &rarr; <strong>System Design</strong> &rarr; <strong>DevOps & Cloud</strong>
-      </p>
-    </div>
-  </div>
-
-</div>
-
----
-
 ## Library Subjects
 
-Browse individual subjects and checklists:
+Select a subject path to view the documentation structure and start learning:
 
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-top: 20px; margin-bottom: 40px;">
 
@@ -81,7 +51,7 @@ Browse individual subjects and checklists:
     {% assign subject_slug = subject_item[0] %}
     {% assign subject = subject_item[1] %}
     
-    <div style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); border-top: 3px solid #58a6ff; border-radius: 6px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+    <div style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); border-top: 3px solid #389fff; border-radius: 6px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
       <div>
         <h3 style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; color: var(--text-heading); margin-bottom: 8px; text-transform: capitalize;">
           {{ subject_slug | replace: '-', ' ' }}
@@ -100,7 +70,7 @@ Browse individual subjects and checklists:
         </div>
       </div>
       
-      <a href="{{ subject.first_lesson_url | relative_url }}" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; text-align: center; background-color: var(--bg-hover); border: 1px solid var(--border-color); color: var(--text-heading); padding: 8px; border-radius: 4px; font-size: 0.85rem; font-weight: 500; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#30363d'" onmouseout="this.style.backgroundColor='var(--bg-hover)'">
+      <a href="{{ subject.first_lesson_url | relative_url }}" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; text-align: center; background-color: var(--bg-hover); border: 1px solid var(--border-color); color: var(--text-heading); padding: 8px; border-radius: 4px; font-size: 0.85rem; font-weight: 500; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='var(--bg-hover)'" onmouseout="this.style.backgroundColor='transparent'">
         Start Reading <i class="fa-solid fa-arrow-right"></i>
       </a>
     </div>
