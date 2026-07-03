@@ -825,3 +825,103 @@ a:hover {
   border: 1px solid rgba(16, 185, 129, 0.35);
 }
 
+/* Wiki Priority Badges below Title */
+.wiki-priority-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+.wiki-priority-badge.p1 {
+  background-color: rgba(239, 68, 68, 0.08);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.18);
+}
+
+.wiki-priority-badge.p2 {
+  background-color: rgba(245, 158, 11, 0.08);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.18);
+}
+
+.wiki-priority-badge.p3 {
+  background-color: rgba(16, 185, 129, 0.08);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.18);
+}
+
+/* Callouts / Alerts styling */
+.markdown-body blockquote.callout {
+  border-left: 4px solid var(--border-color);
+  padding: 16px 20px;
+  margin: 24px 0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  opacity: 0.95;
+}
+
+.markdown-body blockquote.callout p {
+  margin-bottom: 8px;
+}
+.markdown-body blockquote.callout p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body blockquote.callout-note {
+  background-color: rgba(56, 139, 253, 0.06);
+  border-left-color: #388bfd;
+}
+.markdown-body blockquote.callout-note strong.callout-title {
+  color: #58a6ff;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.markdown-body blockquote.callout-important {
+  background-color: rgba(248, 81, 73, 0.06);
+  border-left-color: #f85149;
+}
+.markdown-body blockquote.callout-important strong.callout-title {
+  color: #ff7b72;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.markdown-body blockquote.callout-tip {
+  background-color: rgba(63, 185, 80, 0.06);
+  border-left-color: #3fb950;
+}
+.markdown-body blockquote.callout-tip strong.callout-title {
+  color: #56d364;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.markdown-body blockquote.callout-warning {
+  background-color: rgba(210, 153, 34, 0.06);
+  border-left-color: #d29922;
+}
+.markdown-body blockquote.callout-warning strong.callout-title {
+  color: #e3b341;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.markdown-body blockquote.callout-caution {
+  background-color: rgba(248, 81, 73, 0.09);
+  border-left-color: #f85149;
+}
+.markdown-body blockquote.callout-caution strong.callout-title {
+  color: #f85149;
+  display: block;
+  margin-bottom: 6px;
+}
+
+
+

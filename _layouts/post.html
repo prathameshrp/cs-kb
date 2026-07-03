@@ -19,6 +19,12 @@ layout: default
     <h1 class="wiki-title">{{ page.title }}</h1>
     
     <div class="wiki-meta">
+      {% if page.priority %}
+        <span class="wiki-meta-item wiki-priority-badge {{ page.priority | downcase }}">
+          {{ page.priority }}
+        </span>
+        <span class="wiki-meta-sep">·</span>
+      {% endif %}
       {% if page.last_modified_at %}
         <span class="wiki-meta-item">
           <i class="fa-regular fa-clock"></i>

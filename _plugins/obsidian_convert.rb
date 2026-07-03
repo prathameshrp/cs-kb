@@ -362,6 +362,48 @@ module Jekyll
         if page.content
           page.content.gsub!(/```dataview[\s\S]*?```/, "*[Dataview queries are only supported in Obsidian app]*")
           
+          # Convert Obsidian Callouts to styled HTML blockquotes
+          lines = page.content.split("\n")
+          in_callout = false
+          callout_type = nil
+          callout_lines = []
+          new_lines = []
+
+          lines.each do |line|
+            if line =~ /^\s*>\s*\[!([a-zA-Z]+)\]\s*(.*)$/
+              if in_callout
+                new_lines << "<blockquote class='callout callout-#{callout_type}' markdown='1'>"
+                new_lines.concat(callout_lines)
+                new_lines << "</blockquote>"
+                callout_lines = []
+              end
+              in_callout = true
+              callout_type = $1.downcase
+              title = $2.strip
+              if title.empty?
+                title = callout_type.capitalize
+              end
+              callout_lines << "<strong class='callout-title'>#{title}</strong>"
+            elsif in_callout && line =~ /^\s*>\s*(.*)$/
+              callout_lines << $1
+            else
+              if in_callout
+                new_lines << "<blockquote class='callout callout-#{callout_type}' markdown='1'>"
+                new_lines.concat(callout_lines)
+                new_lines << "</blockquote>"
+                in_callout = false
+                callout_lines = []
+              end
+              new_lines << line
+            end
+          end
+          if in_callout
+            new_lines << "<blockquote class='callout callout-#{callout_type}' markdown='1'>"
+            new_lines.concat(callout_lines)
+            new_lines << "</blockquote>"
+          end
+          page.content = new_lines.join("\n")
+          
           # Replace priority tags with styled span badges
           page.content.gsub!(/\s+#(p[1-3])\b/i) do
             tag = $1.downcase
