@@ -145,6 +145,7 @@ module Jekyll
           permalink: permalink,
           subject_slug: subject_slug,
           subject_title: subject_title,
+          subject_folder: parts[0],
           segments: parts[1..-1] # Middle folders + filename
         }
       end
@@ -179,6 +180,7 @@ module Jekyll
           path: note[:path],
           subject_slug: note[:subject_slug],
           subject_title: note[:subject_title],
+          subject_folder: note[:subject_folder],
           segments: note[:segments]
         }
       end
@@ -220,6 +222,7 @@ module Jekyll
         subject_slug = item[:subject_slug]
         subjects_trees[subject_slug] ||= {
           'title' => item[:subject_title],
+          'folder' => item[:subject_folder],
           'dirs' => {},
           'files' => []
         }
@@ -238,8 +241,41 @@ module Jekyll
         flat_items = []
         self.class.flatten_tree(tree, 0, flat_items)
         
+        # Pull description dynamically from README.md inside the subject folder
+        description = ""
+        subject_folder = tree['folder']
+        readme_path = File.join(notes_dir, subject_folder, "README.md")
+        if File.exist?(readme_path)
+          begin
+            readme_content = File.read(readme_path)
+            # Scan for blockquotes (lines starting with >)
+            quotes = readme_content.scan(/^\s*>\s*(.*)$/).map { |m| m[0].strip }
+            description = quotes.join(" ") unless quotes.empty?
+          rescue => e
+            Jekyll.logger.error "ObsidianConverter:", "Error reading README for #{subject_folder}: #{e.message}"
+          end
+        end
+
+        # Default fallback description if none is found
+        if description.empty?
+          description = "A reference guide for #{tree['title']}. Prepend lines with '>' in your #{subject_folder}/README.md to display a description card here."
+        end
+
+        # Find the published modules/subfolders
+        subject_prefixes = whitelist_prefixes.select { |pref| pref.start_with?(subject_folder + "/") }
+        modules_list = subject_prefixes.map do |pref|
+          pref.sub(subject_folder + "/", "").chomp("/")
+        end.reject(&:empty?)
+
+        # Find first lesson url
+        first_lesson = flat_items.find { |item| item['type'] == 'file' }
+        first_lesson_url = first_lesson ? first_lesson['url'] : "#"
+
         site.config['curriculum'][subject_slug] = {
           'title' => tree['title'],
+          'description' => description,
+          'modules' => modules_list,
+          'first_lesson_url' => first_lesson_url,
           'items' => flat_items
         }
       end
