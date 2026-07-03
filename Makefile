@@ -8,7 +8,7 @@ serve:
 
 # Update the notes submodule to the latest commit of your vault
 update:
-	git submodule update --remote --merge
+	git -c protocol.file.allow=always submodule update --remote --merge
 
 # Build the site locally
 build:
