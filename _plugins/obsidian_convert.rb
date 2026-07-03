@@ -40,10 +40,28 @@ module Jekyll
       str.downcase.strip.gsub(/[^a-z0-9]+/, '-')
     end
 
+    def self.clean_segment(seg)
+      cleaned = seg.dup
+      cleaned.sub!(/^\d+\s*-\s*/, '')   # strips "01 - "
+      cleaned.sub!(/^l\d+\s+/i, '')     # strips "L0 "
+      cleaned
+    end
+
     def self.make_permalink(rel_path)
       parts = rel_path.split('/')
-      # Slugify each individual segment of the path
-      slugified_parts = parts.map { |seg| slugify(File.basename(seg, ".md")) }.reject(&:empty?)
+      filename = parts.last
+      folders = parts[0...-1]
+
+      slugified_folders = folders.map do |folder|
+        clean = clean_segment(folder)
+        slugify(clean)
+      end
+
+      slugified_filename = slugify(File.basename(filename, ".md"))
+
+      slugified_parts = slugified_folders + [slugified_filename]
+      slugified_parts.reject!(&:empty?)
+      
       "/#{slugified_parts.join('/')}/"
     end
 
@@ -158,7 +176,7 @@ module Jekyll
           subject_slug: subject_slug,
           subject_title: subject_title,
           subject_folder: parts[0],
-          segments: parts[1..-1], # Middle folders + filename
+          segments: parts[1...-1].map { |f| self.class.clean_segment(f) } + [clean_name], # Cleaned directories + original filename
           last_modified: git_date
         }
       end
