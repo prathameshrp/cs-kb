@@ -6,13 +6,74 @@ permalink: /
 
 # Computer Science Reference Library
 
-A curated, self-study reference library compiled directly from your engineering vault. This site provides a structured learning curriculum and documentation path for core computer science subjects.
+Hi, I'm Prathamesh. Welcome to my digital computer science library. This is where I compile my atomic study notes, interview preparation guides, and real-world reference logs. The subjects here represent structured self-study curriculums, built directly out of my private Obsidian notes vault.
+
+---
+
+<!-- Recently Visited Pages Section (Dynamic Client-side LocalStorage) -->
+<div id="recently-visited-section" style="display: none; margin-bottom: 35px; background-color: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 6px; padding: 16px 20px;">
+  <h3 style="font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; color: var(--text-heading); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+    <i class="fa-regular fa-clock" style="color: var(--text-link);"></i> Recently Visited Pages
+  </h3>
+  <ul id="recently-visited-list" style="list-style: none; padding-left: 0; display: flex; flex-direction: column; gap: 6px;"></ul>
+</div>
+
+<script>
+  (function() {
+    const history = JSON.parse(localStorage.getItem('cs_lib_visited') || '[]');
+    const container = document.getElementById('recently-visited-section');
+    const list = document.getElementById('recently-visited-list');
+    if (history.length > 0 && container && list) {
+      container.style.display = 'block';
+      list.innerHTML = history.map(item => `
+        <li style="font-size: 0.88rem;">
+          <a href="${item.url}" style="font-weight: 500; color: var(--text-link); text-decoration: none;">
+            ${item.title}
+          </a>
+          <span style="color: var(--text-muted); font-size: 0.8em; margin-left: 8px;">
+            ${item.url.split('/').slice(2, -1).join(' / ')}
+          </span>
+        </li>
+      `).join('');
+    }
+  })();
+</script>
+
+---
+
+## Curriculum Paths
+
+I organize my self-study topics into two main learning pathways. Follow them in sequence for a complete curriculum path:
+
+<div style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px; margin-bottom: 35px;">
+  
+  <div style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 6px; padding: 16px; display: flex; align-items: center; gap: 16px;">
+    <div style="font-size: 1.5rem; font-weight: bold; color: #58a6ff; min-width: 40px; text-align: center;">01</div>
+    <div>
+      <h4 style="color: var(--text-heading); font-weight: 600; margin-bottom: 4px;">Software Fundamentals Path</h4>
+      <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0;">
+        Mastering language mechanics, memory models, and data organization &rarr; <strong>Java Programming</strong> &rarr; <strong>Data Structures & Algorithms</strong>
+      </p>
+    </div>
+  </div>
+
+  <div style="background-color: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 6px; padding: 16px; display: flex; align-items: center; gap: 16px;">
+    <div style="font-size: 1.5rem; font-weight: bold; color: #fdae84; min-width: 40px; text-align: center;">02</div>
+    <div>
+      <h4 style="color: var(--text-heading); font-weight: 600; margin-bottom: 4px;">Systems & Scale Path</h4>
+      <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0;">
+        Designing distributed architectures, data storage layers, and scaling microservices &rarr; <strong>System Design</strong> &rarr; <strong>DevOps & Cloud</strong>
+      </p>
+    </div>
+  </div>
+
+</div>
 
 ---
 
 ## Library Subjects
 
-Select a subject path to view the documentation structure and start learning:
+Browse individual subjects and checklists:
 
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-top: 20px; margin-bottom: 40px;">
 

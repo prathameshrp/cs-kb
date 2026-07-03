@@ -259,6 +259,25 @@
       wrapper.appendChild(topBar);
       wrapper.appendChild(pre);
     });
+
+    // Track recently read notes in localStorage
+    (function() {
+      const isPage = {% if page.relative_path %}true{% else %}false{% endif %};
+      if (isPage) {
+        let history = JSON.parse(localStorage.getItem('cs_lib_visited') || '[]');
+        const title = "{{ page.title }}";
+        const url = "{{ page.url | relative_url }}";
+        
+        // Remove duplicates
+        history = history.filter(item => item.url !== url);
+        // Add to front
+        history.unshift({ title: title, url: url });
+        // Slice to top 5
+        history = history.slice(0, 5);
+        
+        localStorage.setItem('cs_lib_visited', JSON.stringify(history));
+      }
+    })();
   </script>
 </body>
 </html>
