@@ -32,7 +32,7 @@
 
   // Load search index JSON and initialize Fuse.js
   function loadSearchData() {
-    const searchUrl = searchTrigger.getAttribute('data-search-url') || '/cs-kb/assets/search.json';
+    const searchUrl = searchTrigger.getAttribute('data-search-url') || '/assets/search.json';
     
     fetch(searchUrl)
       .then(response => response.json())

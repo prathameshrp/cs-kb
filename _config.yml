@@ -5,8 +5,8 @@ author: "Prathamesh"
 email: "prathameshrp@github"
 
 # URLs
-url: "https://prathameshrp.github.io"
-baseurl: "/cs-kb"
+url: "https://notes.0xprathamesh.is-a.dev"
+baseurl: ""
 
 # Plugins
 plugins:
